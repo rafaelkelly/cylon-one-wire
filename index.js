@@ -1,23 +1,17 @@
 "use strict";
 
-var Adaptor = require("./lib/adaptor"),
-    Driver = require("./lib/driver");
+var Drivers = {
+  ds18b20: require("./lib/ds18b20")
+};
 
 module.exports = {
-  // Adaptors your module provides, e.g. ["spark"]
-  adaptors: [],
-
-  // Drivers your module provides, e.g. ["led", "button"]
-  drivers: [],
-
-  // Modules intended to be used with yours, e.g. ["cylon-gpio"]
-  dependencies: [],
-
-  adaptor: function(opts) {
-    return new Adaptor(opts);
-  },
+  drivers: Object.keys(Drivers),
 
   driver: function(opts) {
-    return new Driver(opts);
+    if (Drivers[opts.driver]) {
+      return new Drivers[opts.driver](opts);
+    }
+
+    return null;
   }
 };
